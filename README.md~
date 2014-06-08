@@ -1,4 +1,4 @@
 MRpy
 ====
 
-Python implementation of common market research tasks
+Python implementation of common market research tasks and algorithms.
