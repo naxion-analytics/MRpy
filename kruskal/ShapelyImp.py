@@ -17,8 +17,8 @@ def ShapelyImp( Y, X, weights):
     	k = NVars(i)
     
     	if model[i] == 0:    
-    		indices_i = ColIndices(i,n)
-    		model[i] = SSE( X[:, indices_i], Y, weights )
+    	   indices_i = ColIndices(i,n)
+    	   model[i] = SSE( X[:, indices_i], Y, weights )
 
         for ij in xrange(n):
             j = (1<<ij)
@@ -26,9 +26,8 @@ def ShapelyImp( Y, X, weights):
               
             if model[i|j] == 0: 
             	indices_ij = ColIndices(i|j,n)    
-            	model[i|j] = SSE( X[:,indices_ij], Y, weights ) ## bin(i|j)[2:] covariates in model (add extra variable)
-
-       		Imps[ ij ] += factorial(k) * 1.*factorial(n - k -1)/factorial(n)* (model[i]-model[i|j])/model[0]     
+                model[i|j] = SSE( X[:,indices_ij], Y, weights ) ## bin(i|j)[2:] covariates in model (add extra variable)
+       	    Imps[ ij ] += factorial(k) * 1.*factorial(n - k -1)/factorial(n)* (model[i]-model[i|j])/model[0]     
        
             #if ij==0:
             #    print bin(i)[2:].zfill(n), bin(i|j)[2:].zfill(n), model[i], model[i|j]
