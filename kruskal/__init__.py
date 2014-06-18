@@ -1,1 +1,1 @@
-__all__ = ['ShapelyImp','utils']
+__all__ = ['ShapelyImp']
