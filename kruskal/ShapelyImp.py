@@ -22,8 +22,7 @@ def R2(S,i, n):
     
     cov = np.zeros(n+1,dtype=bool)
     for k in range(n):
-        if i&(1<<k)!=0: cov[k+1]=True
-    print bin(i)[2:].zfill(n),' ',cov
+        if i&(1<<k)!=0: cov[k+1] = True
     
     Sxx = S[:,cov]
     Sxx_inv = np.linalg.inv( Sxx[cov,:] )
@@ -38,8 +37,7 @@ def ShapelyImg( S ):
     
     model[0] = S[0,0]  ### no covariates in model, base case
     for i in xrange(2**n_cov):
-        #if i%(2**n/2**10) == 0: print '%d combinations computed'%i
-
+        
         k = NVars(i)
         if model[i] == 0: model[i] = R2(S,i,n_cov)
         
@@ -48,10 +46,6 @@ def ShapelyImg( S ):
             if i == i|j: continue
                 
             if model[i|j] == 0:  model[i|j] = R2(S,i|j,n_cov) 
-            #if ij==0:
-            #    print bin(i)[2:].zfill(n), bin(i|j)[2:].zfill(n), model[i], model[i|j]
-            #    print factorial(NVars(i)) * 1.*factorial(n - NVars(i)-1),' x ', (1.-model[i|j]/model[0])
-            
             kruskal[ ij ] += factorial(k) * 1.*factorial(n_cov - k -1)/factorial(n_cov)* (model[i]-model[i|j])/model[0]
             
     return kruskal
