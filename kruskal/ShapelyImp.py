@@ -49,3 +49,7 @@ def ShapelyImg( S ):
             kruskal[ ij ] += factorial(k) * 1.*factorial(n_cov - k -1)/factorial(n_cov)* (model[i]-model[i|j])/model[0]
             
     return kruskal
+
+
+
+    
