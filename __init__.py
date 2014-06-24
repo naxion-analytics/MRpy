@@ -1,1 +1,1 @@
-__all__ = ['polyhedralACA','kruskal']
+__all__ = ['polyhedralACA','shapley']
