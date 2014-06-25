@@ -19,5 +19,5 @@ import statsmodels.api as sm
 ww = weights/np.sum(weights)
 
 ### weighted linear regression using the two covariates
-model = sm.WLS(X[:,0],X[:,1:], weights = ww).fit()
+model = sm.WLS(X[:,0],X[:,1:], weights = ww).fit() ### warning statsmodels does weighted regression wrong..
 model.rsquared == R2(S, 2, 2) ## R2 with two covariates in it. These should be equal
