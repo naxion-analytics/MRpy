@@ -9,8 +9,8 @@ def NVars(n):
     ### count number of cols are used in model n
     count=0
     while n>0:
-        count+=1
-        n = n&(n-1)
+        count += 1
+        n = n & (n-1)
     return count
 
 #@jit('f8(f8[:,:],i8,i8)')
@@ -18,7 +18,7 @@ def R2(S, i, n):
     ### get the R2 for a model containing the variables i
     cov = np.zeros(n+1,dtype=bool)
     for k in range(n):
-        if i&(1<<k)!=0: cov[k+1] = True
+        if i & (1<<k)!=0: cov[k+1] = True
     
     Sxx = S[:,cov]
     Sxx_inv = np.linalg.inv( Sxx[cov,:] )

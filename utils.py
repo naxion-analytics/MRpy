@@ -1,5 +1,6 @@
 import numpy as np
 
+__all__ = ['cov']
 
 def cov(data,weights=None):
 	""" function to compute weighted covariance matrix correctly. 
