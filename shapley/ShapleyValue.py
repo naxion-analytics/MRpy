@@ -15,7 +15,7 @@ def NVars(n):
 
 #@jit('f8(f8[:,:],i8,i8)')
 def R2(S, i, n):
-    
+    ### get the R2 for a model containing the variables i
     cov = np.zeros(n+1,dtype=bool)
     for k in range(n):
         if i&(1<<k)!=0: cov[k+1] = True
@@ -23,7 +23,7 @@ def R2(S, i, n):
     Sxx = S[:,cov]
     Sxx_inv = np.linalg.inv( Sxx[cov,:] )
     Syx = S[0,cov]; Sxy = S[cov,0]
-    return Syx.dot(Sxx_inv.dot(Sxy) )/S[0,0]
+    return Syx.dot(Sxx_inv.dot(Sxy) )
 
 #@jit('f8[:](f8[:,:])')
 def ShapleyValue( S ):
@@ -31,7 +31,7 @@ def ShapleyValue( S ):
     model = np.zeros(2**n_cov)
     shapley =np.zeros(n_cov)
     
-    model[0] = S[0,0]  ### no covariates in model, base case
+    model[0] = 0.  ### no covariates in model, base case, R2 for no covariates
     for i in xrange(2**n_cov):
         
         k = NVars(i)
@@ -42,7 +42,7 @@ def ShapleyValue( S ):
             if i == i|j: continue
                 
             if model[i|j] == 0:  model[i|j] = R2(S,i|j,n_cov) 
-            shapley[ ij ] += factorial(k) * 1.*factorial(n_cov - k -1)/factorial(n_cov)* (model[i]-model[i|j])/model[0]
+            shapley[ ij ] += factorial(k) * 1.*factorial(n_cov - k -1)/factorial(n_cov)* (model[i|j]-model[i])/model[0]
             
     return shapley
 
