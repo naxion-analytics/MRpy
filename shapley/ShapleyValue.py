@@ -10,7 +10,6 @@ def NVars(n):
     Count the number of non-zero bits in the integer n. These correspond to the columns/variables
     included in the model.
     """
-    ### count number of cols are used in model n
     count=0
     while n>0:
         count += 1

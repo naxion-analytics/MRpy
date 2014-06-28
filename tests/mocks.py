@@ -1,9 +1,13 @@
 import numpy as np
-
+import pandas as pd
 
 #### random data with weights
 np.random.seed(42)
-X = np.random.rand(15,3)
-X[:,0] = 0.5 + .25*X[:,1] + np.random.rand(15)
-X[:,2] = X[:,1]*.01
-weights = np.random.rand(10+5)
+data = pd.DataFrame(np.random.randn(1000,5))
+weights = abs(np.random.rand(1000))
+
+
+known_covariance_weighted = [[ ]]
+known_covariance_unweighted = [[ ]]
+known_shapley = []
+known_R2 = None
