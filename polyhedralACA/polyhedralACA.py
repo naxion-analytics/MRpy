@@ -63,7 +63,7 @@ class polyhedralACA():
         if np.linalg.norm(U_inv.dot(d) )<.25:
             alpha=[1.]
         else:
-        alpha = optimize.line_search(f,gradf,u, d)
+            alpha = optimize.line_search(f,gradf,u, d)
     
         return u+ alpha[0]*d
 

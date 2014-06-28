@@ -4,8 +4,12 @@ from math import factorial
 
 __all__ = ['NVars','R2','ShapelyImp']
 
-#@jit('i8(i8)')
+@jit('i8(i8)')
 def NVars(n):
+    """
+    Count the number of non-zero bits in the integer n. These correspond to the columns/variables
+    included in the model.
+    """
     ### count number of cols are used in model n
     count=0
     while n>0:
@@ -13,8 +17,12 @@ def NVars(n):
         n = n & (n-1)
     return count
 
-#@jit('f8(f8[:,:],i8,i8)')
+@jit('f8(f8[:,:],i8,i8)')
 def R2(S, i, n):
+    """
+    Computs the coefficient of determinantion (R-squared) from the covariance matrix S for a model 
+    containing variables i out of n total covariates. 
+    """
     ### get the R2 for a model containing the variables i
     cov = np.zeros(n+1,dtype=bool)
     for k in range(n):
@@ -25,8 +33,13 @@ def R2(S, i, n):
     Syx = S[0,cov]; Sxy = S[cov,0]
     return Syx.dot(Sxx_inv.dot(Sxy) )
 
-#@jit('f8[:](f8[:,:])')
+@jit('f8[:](f8[:,:])')
 def ShapleyValue( S ):
+    """
+    Computes the Shapley importance of each n covariate in a linear model from the (weighted) covariance
+    (n+1) x (n+1) matrix. Returns a vector of length n giving the average amount of R2 attributed 
+    to the nth variable. 
+    """
     n_cov = S.shape[1]-1
     model = np.zeros(2**n_cov)
     shapley =np.zeros(n_cov)
