@@ -23,7 +23,6 @@ def R2(S, i, n):
     Computs the coefficient of determinantion (R-squared) from the covariance matrix S for a model 
     containing variables i out of n total covariates. 
     """
-    ### get the R2 for a model containing the variables i
     cov = np.zeros(n+1,dtype=bool)
     for k in range(n):
         if i & (1<<k)!=0: cov[k+1] = True
@@ -41,8 +40,8 @@ def ShapleyValue( S ):
     to the nth variable. 
     """
     n_cov = S.shape[1]-1
-    model = np.zeros(2**n_cov)
-    shapley =np.zeros(n_cov)
+    model = np.zeros(2**n_cov) ### storage space to memoize the models computed
+    shapley =np.zeros(n_cov)   ### storage space for the shapley importances
     
     model[0] = 0.  ### no covariates in model, base case, R2 for no covariates
     for i in xrange(2**n_cov):
@@ -51,10 +50,14 @@ def ShapleyValue( S ):
         if model[i] == 0: model[i] = R2(S,i,n_cov)
         
         for ij in xrange(n_cov):
-            j = (1<<ij)
+            ### add the ij variable to the i. if its already in i, continue, else compute new model
+            j = (1<<ij)  
             if i == i|j: continue
                 
             if model[i|j] == 0:  model[i|j] = R2(S,i|j,n_cov) 
+
+            ### compute the improvement in R2 given the addition of the jth variable and average over
+            ### permutations possible
             shapley[ ij ] += factorial(k) * 1.*factorial(n_cov - k -1)/factorial(n_cov)* (model[i|j]-model[i])/model[0]
             
     return shapley
