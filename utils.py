@@ -1,6 +1,6 @@
 import numpy as np
 
-__all__ = ['cov']
+__all__ = ['cov','cor']
 
 def cov(data, weights=None):
 	""" 
@@ -14,3 +14,7 @@ def cov(data, weights=None):
 	data = np.sqrt(w).dot(data - np.sum( w.dot(data),axis=0))
 
 	return 1./(1.-np.sum(w**2)) * data.T.dot(data)
+
+def cor(covariance_matrix):
+	std = np.diagflat( np.sqrt( covariance_matrix.diagonal())**-1 )
+	return std.dot(covariance_matrix).dot(std)
