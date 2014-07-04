@@ -26,7 +26,7 @@ def Rsq(S, i, n):
     cov = np.zeros(n+1,dtype=bool)
     for k in range(n):
         if i & (1<<k)!=0: cov[k+1] = True
-    print cov
+
     Sxx = S[:,cov]
     Sxx_inv = np.linalg.inv( Sxx[cov,:] )
     Syx = S[0,cov]; Sxy = S[cov,0]
