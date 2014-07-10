@@ -58,7 +58,7 @@ def ShapleyValue( S ):
 
             ### compute the improvement in R2 given the addition of the jth variable and average over
             ### permutations possible
-            shapley[ ij ] += factorial(k) * 1.*factorial(n_cov - k -1)/factorial(n_cov)* (model[i|j]-model[i])/model[0]
+            shapley[ ij ] += factorial(k) * 1.*factorial(n_cov - k -1)/factorial(n_cov)* (model[i|j]-model[i])/S[0,0]
             
     return shapley
 
