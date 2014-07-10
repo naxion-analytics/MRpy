@@ -68,7 +68,7 @@ def KruskalReg(corr, targets):
     Find the linear regression coefficients given desired net effects. A wrapper for a bounded L-BFGS-B
     optimizer.
     """
-    fit = optimize.minimize( np.sum( (np.multiply(x.dot(corr[1:,1:]), x) - targets)**2 ), 
+    fit = optimize.minimize( lambda x: np.sum( (np.multiply(x.dot(corr[1:,1:]), x) - targets)**2 ), 
                 method='L-BFGS-B',
                 x0 = np.array([0.001]*corr[1:,1:].shape[0]), 
                 bounds = [(0,None)]*corr[1:,1:].shape[0] )
