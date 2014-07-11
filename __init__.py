@@ -1,1 +1,1 @@
-__all__ = ['polyhedralACA','shapley','mcmc']
+__all__ = ['polyhedralACA','linear_model','mcmc']
