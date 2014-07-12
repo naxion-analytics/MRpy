@@ -5,7 +5,7 @@ from math import factorial
 
 from ..utils import *
 
-__all__ = ['Regression']
+__all__ = ['Nvars','Rsq','ShapleyValue','ConstrainedRegression']
 
 @jit('i8(i8)')
 def NVars(n):
@@ -64,6 +64,9 @@ def ShapleyValue( S ):
     return shapley
 
 
+
+
+
 class ConstrainedRegression():
 
     def __init__(self, fit_intercept = True):
@@ -89,7 +92,7 @@ class ConstrainedRegression():
         Fit a linear regression with prescribed importances defined by the Shapley value for each covariate
         """
         if weights is None: weights = np.ones(y.shape[0])
-        data = np.hstack((y,X))
+        data = np.hstack((y.reshape(y.shape[0],1),X))
 
         S = cov(data, weights)
         corr = cor(S)
@@ -105,7 +108,7 @@ class ConstrainedRegression():
 
         self.coef_ = wsd[0]*model.x/wsd[1:] 
 
-        return fit
+        return model
 
     def decision_function(self, X):
         """
@@ -117,11 +120,10 @@ class ConstrainedRegression():
         """
         Predict using the linear model
         """
+        return self.intercept_ + X.dot(self.coef_)
 
-        if self.fit_intercept: return self.intercept_ + X.dot(self.coef_)
-        else: return X.dot(self.coef_) 
 
-    def score(self,X,y,weights = None):
+    def score(self,X, y, weights = None):
         """
         Returns the coefficient of determination R^2 of the prediction.
         """
