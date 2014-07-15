@@ -77,12 +77,12 @@ class ShapleyRegression(ConstrainedRegression):
         if weights is None: weights = np.ones(y.shape[0])
         data = np.hstack((y.reshape(y.shape[0],1),X))
 
-        S = cov(data, weights)
-        corr = cor(S)
+        S = wcov(data, weights)
+        corr = wcorr(data, weights)
         wsd = np.sqrt(S.diagonal())
 
-        self.importances = ShapleyValue(S)
-        model = self.constrained_optimization(corr)
+        self.importances = ShapleyValue( S )
+        model = self.constrained_optimization( corr )
 
         if self.fit_intercept:
             w = np.diagflat( weights/np.sum(weights),k=0)
