@@ -4,8 +4,9 @@ from numba import jit
 from math import factorial
 
 from ..utils import *
+from .base import *
 
-__all__ = ['Nvars','Rsq','ShapleyValue','ConstrainedRegression']
+__all__ = ['Nvars','Rsq','ShapleyValue','ShapleyRegression']
 
 @jit('i8(i8)')
 def NVars(n):
@@ -64,28 +65,10 @@ def ShapleyValue( S ):
     return shapley
 
 
-
-
-
-class ConstrainedRegression():
-
-    def __init__(self, fit_intercept = True):
-        self.fit_intercept = fit_intercept
-        self.coef_ = None
-        self.intercept_ = 0
-        self.importances = None
-
-    def constrained_optimization(self, corr):
-        """
-        Find the linear regression coefficients given desired net effects. A wrapper for a bounded L-BFGS-B
-        optimizer.
-        """
-        fit = optimize.minimize( lambda x: np.sum( (np.multiply(x.dot(corr[1:,1:]), x) - self.importances)**2 ), 
-                    method='L-BFGS-B',
-                    x0 = np.array([0.001]*corr[1:,1:].shape[0]), 
-                    bounds = [(0,None)]*corr[1:,1:].shape[0] )
-        return fit
-
+class ShapleyRegression(ConstrainedRegression):
+    """
+    Shapley valued regression
+    """
 
     def fit(self, X, y, weights = None ):
         """
@@ -108,32 +91,5 @@ class ConstrainedRegression():
 
         self.coef_ = wsd[0]*model.x/wsd[1:] 
 
-        return model
-
-    def decision_function(self, X):
-        """
-        Decision function of the linear model
-        """
-        return self.predict(X)
-
-    def predict(self, X):
-        """
-        Predict using the linear model
-        """
-        return self.intercept_ + X.dot(self.coef_)
-
-
-    def score(self,X, y, weights = None):
-        """
-        Returns the coefficient of determination R^2 of the prediction.
-        """
-
-        if weights is None: weights = np.ones(y.shape[0])
-
-        y_mean = weights/np.sum(weights) *y
-        y_pred = self.predict(X)
-        u = ((y - y_pred)**2).sum()
-        v = ((y - y_mean)**2).sum()
-        return 1.-u/v
-
+        return self
     
