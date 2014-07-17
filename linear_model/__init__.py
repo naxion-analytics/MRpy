@@ -1,1 +1,1 @@
-__all__ = ['base','Shapley']
+__all__ = ['base','Shapley','RandomForest']
