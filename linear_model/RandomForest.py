@@ -1,12 +1,16 @@
-from sklearn.ensemble import ExtraTreesClassifier
+import numpy as np
+from sklearn.ensemble import ExtraTreesRegressor
 from .base import *
+from ..utils import *
+
+__all__ = ['ExtraTreesRegression']
 
 class ExtraTreesRegression(ConstrainedRegression):
     """
     Fit a constrained regression model with the importances from an extra tree classifier
     """
     
-    def fit(self, X,y,weights = None, **kwargs):
+    def fit(self, X, y, weights = None, **kwargs):
         if weights is None: weights = np.ones(y.shape[0])
         data = np.hstack((y.reshape(y.shape[0],1),X))
         
@@ -14,10 +18,13 @@ class ExtraTreesRegression(ConstrainedRegression):
         corr = wcorr(data, weights)
         wsd = np.sqrt(S.diagonal())
         
-        ExtraTrees = ExtraTreesClassifier(**kwargs)
-        ExtraTrees.fit(X,y,sample_weight=weights)
+        ExtraTrees = ExtraTreesRegressor(**kwargs)
+        ExtraTrees.fit(X,y, sample_weight=weights)
         
-        self.importances = ExtraTrees.feature_importances_
+        Rsquare = ( S[0,1:].dot(np.linalg.inv(S[1:,1:]).dot(S[1:,0])) )/S[0,0]
+        
+        # assign proportion of Rsquare to each covariate dep. on importance
+        self.importances = ExtraTrees.feature_importances_ * Rsquare 
         model = self.constrained_optimization( corr )
         
         if self.fit_intercept:
