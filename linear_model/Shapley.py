@@ -39,7 +39,7 @@ def Rsq(S, i, n):
 def ShapleyValue( S ):
     """
     Computes the Shapley importance of each n covariate in a linear model from the (weighted) covariance
-    (n+1) x (n+1) matrix. Returns a vector of length n giving the average amount of R2 attributed 
+    (n+1) x (n+1) matrix, S. Returns a vector of length n giving the average amount of R2 attributed 
     to the nth variable. 
     """
     n_cov = S.shape[1]-1
